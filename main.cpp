@@ -24,33 +24,45 @@ int StringToInt ( const std::string &Text )
     return ss >> result ? result : 0;
 }
 
+char separator = ',';
+ifstream _file;
+map<int, char> _mapNodeTypeA;
 
-int main() {
-    std::filesystem::path cwd = std::filesystem::current_path() / "robot";
-    std::ofstream file(cwd.string());
-    file.close();
-
-    const cv::String& path = "../nodes_input.csv";
-
-    ifstream _file;
-    char separator = ',';
-
+void readNodesInput(const cv::String& path) {
     _file.open(path.c_str(), ifstream::in);
-    std::string line;
 
-//    vector<int> list_nodeA;
-    map<int, char> mapNodeA;
+    string index, type;
+    std::string line;
 
     while (getline(_file, line)) {
         stringstream lineStream(line);
 
-        string index, type;
         getline(lineStream, index, separator);
         getline(lineStream, type);
 
         int indexInt = StringToInt(index);
-        mapNodeA[indexInt] = 'A';
+        if (type[0] == 'A')
+            _mapNodeTypeA[indexInt] = 'A';
     }
+}
+
+bool isNodeTypeA(int index) {
+    if (_mapNodeTypeA[index]) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void printCWD() {
+    std::filesystem::path cwd = std::filesystem::current_path() / "robot";
+    std::ofstream file(cwd.string());
+    file.close();
+}
+
+int main() {
+    printCWD();
+    readNodesInput("../nodes_input.csv");
 
     std::cout << "Hello, World!" << std::endl;
     return 0;

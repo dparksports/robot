@@ -11,7 +11,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f9e9ffd-a6d1-4259-91df-83015d5d8413" name="Default Changelist" comment="" />
+    <list default="true" id="3f9e9ffd-a6d1-4259-91df-83015d5d8413" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/robot" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/robot" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +26,11 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1XYN14c0se4iQwjtKmeAn5hpiW8" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -29,6 +38,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
   </component>
   <component name="RunManager">
@@ -48,7 +58,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1581218849555</updated>
-      <workItem from="1581218851961" duration="4596000" />
+      <workItem from="1581218851961" duration="5458000" />
     </task>
     <servers />
   </component>
@@ -56,46 +66,50 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1398" height="171" key="GridCell.Tab.0.bottom" timestamp="1581227037750">
+    <state width="1398" height="224" key="GridCell.Tab.0.bottom" timestamp="1581227873538">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="171" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1581227037750" />
-    <state width="1398" height="171" key="GridCell.Tab.0.center" timestamp="1581227037744">
+    <state width="1398" height="224" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1581227873538" />
+    <state width="1398" height="224" key="GridCell.Tab.0.center" timestamp="1581227873537">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="171" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1581227037744" />
-    <state width="1398" height="171" key="GridCell.Tab.0.left" timestamp="1581227037743">
+    <state width="1398" height="224" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1581227873537" />
+    <state width="1398" height="224" key="GridCell.Tab.0.left" timestamp="1581227873537">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="171" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1581227037743" />
-    <state width="1398" height="171" key="GridCell.Tab.0.right" timestamp="1581227037744">
+    <state width="1398" height="224" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1581227873537" />
+    <state width="1398" height="224" key="GridCell.Tab.0.right" timestamp="1581227873537">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="171" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1581227037744" />
-    <state width="1398" height="171" key="GridCell.Tab.1.bottom" timestamp="1581227044528">
+    <state width="1398" height="224" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1581227873537" />
+    <state width="1398" height="224" key="GridCell.Tab.1.bottom" timestamp="1581227879138">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="171" key="GridCell.Tab.1.bottom/0.23.1440.877@0.23.1440.877" timestamp="1581227044528" />
-    <state width="1398" height="171" key="GridCell.Tab.1.center" timestamp="1581227044527">
+    <state width="1398" height="224" key="GridCell.Tab.1.bottom/0.23.1440.877@0.23.1440.877" timestamp="1581227879138" />
+    <state width="1398" height="224" key="GridCell.Tab.1.center" timestamp="1581227879137">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="171" key="GridCell.Tab.1.center/0.23.1440.877@0.23.1440.877" timestamp="1581227044527" />
-    <state width="1398" height="171" key="GridCell.Tab.1.left" timestamp="1581227044526">
+    <state width="1398" height="224" key="GridCell.Tab.1.center/0.23.1440.877@0.23.1440.877" timestamp="1581227879137" />
+    <state width="1398" height="224" key="GridCell.Tab.1.left" timestamp="1581227879137">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="171" key="GridCell.Tab.1.left/0.23.1440.877@0.23.1440.877" timestamp="1581227044526" />
-    <state width="1398" height="171" key="GridCell.Tab.1.right" timestamp="1581227044527">
+    <state width="1398" height="224" key="GridCell.Tab.1.left/0.23.1440.877@0.23.1440.877" timestamp="1581227879137" />
+    <state width="1398" height="224" key="GridCell.Tab.1.right" timestamp="1581227879137">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="171" key="GridCell.Tab.1.right/0.23.1440.877@0.23.1440.877" timestamp="1581227044527" />
+    <state width="1398" height="224" key="GridCell.Tab.1.right/0.23.1440.877@0.23.1440.877" timestamp="1581227879137" />
+    <state x="320" y="176" key="Vcs.Push.Dialog.v2" timestamp="1581227930235">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="320" y="176" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1581227930235" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>35</line>
-          <option name="timeStamp" value="2" />
+          <line>66</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
