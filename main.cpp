@@ -59,24 +59,31 @@ void readNodes(const cv::String& path) {
     }
 }
 
-const int numbRobots = 4;
-vector<vector<int>> _setOfPaths(numbRobots, vector<int>(0,0));
-
+vector<vector<int>> _setOfPaths;
 void readPaths(const cv::String& path) {
     _file.open(path.c_str(), ifstream::in);
 
-    string index, node;
+    string robotId, nodeId;
     std::string line;
+
+    int currentRobotId = -1;
 
     while (getline(_file, line)) {
         stringstream lineStream(line);
 
-        getline(lineStream, index, separator);
-        getline(lineStream, node);
+        getline(lineStream, robotId, separator);
+        getline(lineStream, nodeId);
 
-        int indexInt = StringToInt(index);
-        int nodeInt = StringToInt(node);
-        _setOfPaths[indexInt].push_back(nodeInt);
+        int nodeIdInt = StringToInt(nodeId);
+        int robotIdInt = StringToInt(robotId);
+
+        if (currentRobotId != robotIdInt) {
+            // supports a non predefined number of nodes per circuit.
+            currentRobotId = robotIdInt;
+            vector<int> newCircuit;
+            _setOfPaths.push_back(newCircuit);
+        }
+        _setOfPaths[robotIdInt].push_back(nodeIdInt);
     }
 }
 
@@ -109,11 +116,26 @@ void readRobots(const cv::String& path) {
     }
 }
 
+int measureTime(const int& robotId) {
+    vector<int> circuit = _setOfPaths[robotId];
+    RobotSpec robot = _robots[robotId];
+
+    int time = 0;
+    for (int i = 0; i < circuit.size(); ++i) {
+        time += robot.speed;
+    }
+
+    return time;
+}
+
 int main() {
     printCWD();
+    readPaths("../paths_input.csv");
     readRobots("../robots_input.csv");
-//    readPaths("../paths_input.csv");
-//    readNodes("../nodes_input.csv");
+    readNodes("../nodes_input.csv");
+
+    int robotId = 0;
+    int timeSigma = measureTime(robotId);
 
     std::cout << "Hello, World!" << std::endl;
     return 0;
