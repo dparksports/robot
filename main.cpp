@@ -35,6 +35,12 @@ char separator = ',';
 ifstream _file;
 map<int, char> _mapNodeTypeA;
 
+enum NodeType { A, B};
+struct NodeSpec {
+    int number;
+    NodeType type;
+} NodeSpec;
+
 void readNodes(const cv::String& path) {
     _file.open(path.c_str(), ifstream::in);
 
@@ -52,6 +58,15 @@ void readNodes(const cv::String& path) {
             _mapNodeTypeA[indexInt] = 'A';
     }
 }
+
+bool isNodeTypeA(int index) {
+    if (_mapNodeTypeA[index]) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 const int numbRobots = 4;
 vector<vector<int>> _setOfPaths(numbRobots, vector<int>(0,0));
@@ -74,17 +89,39 @@ void readPaths(const cv::String& path) {
     }
 }
 
-bool isNodeTypeA(int index) {
-    if (_mapNodeTypeA[index]) {
-        return true;
-    } else {
-        return false;
+enum RobotType { mover, organizer};
+struct RobotSpec {
+    int number;
+    RobotType type;
+    int speed;
+};
+
+map<int, RobotSpec> _robots;
+void readRobots(const cv::String& path) {
+    _file.open(path.c_str(), ifstream::in);
+
+    string index, type, speed;
+    std::string line;
+
+    while (getline(_file, line)) {
+        stringstream lineStream(line);
+
+        getline(lineStream, index, separator);
+        getline(lineStream, type, separator);
+        getline(lineStream, speed);
+
+        RobotSpec robot;
+        robot.number = StringToInt(index);
+        robot.speed = StringToInt(speed);
+        robot.type = (type[0] == 'm') ? mover : organizer;
+        _robots[robot.number] = robot;
     }
 }
 
 int main() {
     printCWD();
-    readPaths("../paths_input.csv");
+    readRobots("../robots_input.csv");
+//    readPaths("../paths_input.csv");
 //    readNodes("../nodes_input.csv");
 
     std::cout << "Hello, World!" << std::endl;
