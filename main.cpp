@@ -17,13 +17,15 @@
 using namespace std;
 using namespace cv;
 
+char separator = ',';
+ifstream _file;
+
 void printCWD() {
     std::filesystem::path cwd = std::filesystem::current_path() / "robot";
     std::ofstream file(cwd.string());
     file.close();
 }
 
-// Converts a given string to an integer
 int StringToInt ( const std::string &Text )
 {
     std::istringstream ss(Text);
@@ -31,16 +33,13 @@ int StringToInt ( const std::string &Text )
     return ss >> result ? result : 0;
 }
 
-char separator = ',';
-ifstream _file;
-map<int, char> _mapNodeTypeA;
-
 enum NodeType { A, B};
 struct NodeSpec {
     int number;
     NodeType type;
-} NodeSpec;
+};
 
+map<int, NodeSpec> _mapNode;
 void readNodes(const cv::String& path) {
     _file.open(path.c_str(), ifstream::in);
 
@@ -53,20 +52,12 @@ void readNodes(const cv::String& path) {
         getline(lineStream, index, separator);
         getline(lineStream, type);
 
-        int indexInt = StringToInt(index);
-        if (type[0] == 'A')
-            _mapNodeTypeA[indexInt] = 'A';
+        NodeSpec node;
+        node.number = StringToInt(index);
+        node.type = (type[0] == 'A') ? A : B;
+        _mapNode[node.number] = node;
     }
 }
-
-bool isNodeTypeA(int index) {
-    if (_mapNodeTypeA[index]) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 
 const int numbRobots = 4;
 vector<vector<int>> _setOfPaths(numbRobots, vector<int>(0,0));
