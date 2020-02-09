@@ -23,6 +23,8 @@ vector
 -
 opencv2/core/core.hpp
 -
+sstream
+-
 boost/filesystem.hpp
 /Users/5dof/CLionProjects/robot/boost/filesystem.hpp
 
