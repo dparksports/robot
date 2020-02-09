@@ -18,7 +18,6 @@ using namespace std;
 using namespace cv;
 
 char separator = ',';
-ifstream _file;
 
 void printCWD() {
     std::filesystem::path cwd = std::filesystem::current_path() / "robot";
@@ -41,6 +40,7 @@ struct NodeSpec {
 
 map<int, NodeSpec> _mapNode;
 void readNodes(const cv::String& path) {
+    ifstream _file;
     _file.open(path.c_str(), ifstream::in);
 
     string index, type;
@@ -61,6 +61,7 @@ void readNodes(const cv::String& path) {
 
 vector<vector<int>> _setOfPaths;
 void readPaths(const cv::String& path) {
+    ifstream _file;
     _file.open(path.c_str(), ifstream::in);
 
     string robotId, nodeId;
@@ -96,6 +97,7 @@ struct RobotSpec {
 
 map<int, RobotSpec> _robots;
 void readRobots(const cv::String& path) {
+    ifstream _file;
     _file.open(path.c_str(), ifstream::in);
 
     string index, type, speed;
@@ -130,9 +132,9 @@ int measureTime(const int& robotId) {
 
 int main() {
     printCWD();
-    readPaths("../paths_input.csv");
-    readRobots("../robots_input.csv");
-    readNodes("../nodes_input.csv");
+    readNodes("/Users/5dof/CLionProjects/nodes_input.csv");
+    readPaths("/Users/5dof/CLionProjects/paths_input.csv");
+    readRobots("/Users/5dof/CLionProjects/robots_input.csv");
 
     int robotId = 0;
     int timeSigma = measureTime(robotId);
