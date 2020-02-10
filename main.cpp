@@ -25,8 +25,7 @@ void printCWD() {
     file.close();
 }
 
-int StringToInt ( const std::string &Text )
-{
+int StringToInt ( const std::string &Text ) {
     std::istringstream ss(Text);
     int result;
     return ss >> result ? result : 0;
@@ -57,6 +56,7 @@ void readNodes(const cv::String& path) {
         node.type = (type[0] == 'A') ? A : B;
         _mapNode[node.id] = node;
     }
+    _file.close();
 }
 
 vector<vector<int>> _setOfPaths;
@@ -86,6 +86,7 @@ void readPaths(const cv::String& path) {
         }
         _setOfPaths[robotIdInt].push_back(nodeIdInt);
     }
+    _file.close();
 }
 
 enum RobotType { mover, organizer};
@@ -116,19 +117,20 @@ void readRobots(const cv::String& path) {
         robot.type = (type[0] == 'm') ? mover : organizer;
         _robots[robot.number] = robot;
     }
+    _file.close();
 }
 
 map<string, int> _robotTaskTimes;
-void configureTaskTimes() {
+void configureTaskTimes()
+{
     _robotTaskTimes["mover-push"] = 20;
     _robotTaskTimes["mover-pull"] = 35;
     _robotTaskTimes["organizer-pick"] = 30;
     _robotTaskTimes["organizer-place"] = 45;
-//    int time = _robotTaskTimes["pull"];
-//    std::cout << "time:" << time << std::endl;
 }
 
-int taskTime(const RobotSpec& robot, const NodeSpec& node) {
+int taskTime(const RobotSpec& robot, const NodeSpec& node)
+{
     int taskTime = 0;
     if (robot.type == mover) {
         if (node.type == A) {
@@ -179,16 +181,19 @@ int main() {
 
     int robotId = 0;
     int timeSigma = measureTime(robotId);
+    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
 
     robotId = 1;
-    timeSigma += measureTime(robotId);
+    timeSigma = measureTime(robotId);
+    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
 
     robotId = 2;
-    timeSigma += measureTime(robotId);
+    timeSigma = measureTime(robotId);
+    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
 
     robotId = 3;
-    timeSigma += measureTime(robotId);
+    timeSigma = measureTime(robotId);
+    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
 
-    std::cout << "Hello, World!" << std::endl;
     return 0;
 }
