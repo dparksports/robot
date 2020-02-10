@@ -34,7 +34,7 @@ int StringToInt ( const std::string &Text )
 
 enum NodeType { A, B};
 struct NodeSpec {
-    int number;
+    int id;
     NodeType type;
 };
 
@@ -53,9 +53,9 @@ void readNodes(const cv::String& path) {
         getline(lineStream, type);
 
         NodeSpec node;
-        node.number = StringToInt(index);
+        node.id = StringToInt(index);
         node.type = (type[0] == 'A') ? A : B;
-        _mapNode[node.number] = node;
+        _mapNode[node.id] = node;
     }
 }
 
@@ -118,13 +118,52 @@ void readRobots(const cv::String& path) {
     }
 }
 
+map<string, int> _robotTaskTimes;
+void configureTaskTimes() {
+    _robotTaskTimes["mover-push"] = 20;
+    _robotTaskTimes["mover-pull"] = 35;
+    _robotTaskTimes["organizer-pick"] = 30;
+    _robotTaskTimes["organizer-place"] = 45;
+//    int time = _robotTaskTimes["pull"];
+//    std::cout << "time:" << time << std::endl;
+}
+
+int taskTime(const RobotSpec& robot, const NodeSpec& node) {
+    int taskTime = 0;
+    if (robot.type == mover) {
+        if (node.type == A) {
+            taskTime = _robotTaskTimes["mover-push"];
+        } else {
+
+            // node.type == B
+            taskTime = _robotTaskTimes["mover-pull"];
+        }
+    } else {
+        // robot.type == organizer
+
+        if (node.type == A) {
+            taskTime =  _robotTaskTimes["organizer-pick"];
+        } else {
+            // node.type == B
+            taskTime =  _robotTaskTimes["organizer-place"];
+        }
+    }
+    return taskTime;
+}
+
 int measureTime(const int& robotId) {
     vector<int> circuit = _setOfPaths[robotId];
     RobotSpec robot = _robots[robotId];
 
     int time = 0;
-    for (int i = 0; i < circuit.size(); ++i) {
-        time += robot.speed;
+    for (int nodeId = 0; nodeId < circuit.size(); ++nodeId) {
+        NodeSpec node = _mapNode[nodeId];
+
+        int travelTime = (nodeId == 0) ? 0 : robot.speed;
+        time += travelTime;
+
+        int taskTimeInt = taskTime(robot, node);
+        time += taskTimeInt;
     }
 
     return time;
@@ -132,12 +171,23 @@ int measureTime(const int& robotId) {
 
 int main() {
     printCWD();
-    readNodes("/Users/5dof/CLionProjects/nodes_input.csv");
-    readPaths("/Users/5dof/CLionProjects/paths_input.csv");
-    readRobots("/Users/5dof/CLionProjects/robots_input.csv");
+    readNodes("../nodes_input.csv");
+    readPaths("../paths_input.csv");
+    readRobots("../robots_input.csv");
+
+    configureTaskTimes();
 
     int robotId = 0;
     int timeSigma = measureTime(robotId);
+
+    robotId = 1;
+    timeSigma += measureTime(robotId);
+
+    robotId = 2;
+    timeSigma += measureTime(robotId);
+
+    robotId = 3;
+    timeSigma += measureTime(robotId);
 
     std::cout << "Hello, World!" << std::endl;
     return 0;
