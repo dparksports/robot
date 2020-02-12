@@ -58,7 +58,7 @@ void bar()
     std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
-int main()
+int join()
 {
     std::cout << "starting first helper...\n";
     std::thread helper1(foo);
@@ -71,4 +71,19 @@ int main()
     helper2.join();
 
     std::cout << "done!\n";
+}
+
+void taskRobot() {
+    std::cout << "started a robot task." << std::endl;
+    this_thread::sleep_for(chrono::seconds(3));
+    std::cout << "ended a robot task." << std::endl;
+}
+
+int detachJoin() {
+    thread threadRobot(taskRobot);
+    threadRobot.detach();
+//    threadRobot.join();
+
+    this_thread::sleep_for(chrono::seconds(2));
+    std::cout << "exiting main.." << std::endl;
 }
