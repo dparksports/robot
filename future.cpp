@@ -1,32 +1,11 @@
-#include <iostream>
-#include <future>
+#include <vector>
 #include <thread>
+#include <future>
+#include <numeric>
+#include <iostream>
+#include <chrono>
 
 using namespace std;
-
-void future()
-{
-    // future from a packaged_task
-    std::packaged_task<int()> task([]{ return 7; }); // wrap the function
-    std::future<int> f1 = task.get_future();  // get a future
-    std::thread t(std::move(task)); // launch on a thread
-
-    // future from an async()
-    std::future<int> f2 = std::async(std::launch::async, []{ return 8; });
-
-    // future from a promise
-    std::promise<int> p;
-    std::future<int> f3 = p.get_future();
-    std::thread( [&p]{ p.set_value_at_thread_exit(9); }).detach();
-
-    std::cout << "Waiting..." << std::flush;
-    f1.wait();
-    f2.wait();
-    f3.wait();
-    std::cout << "Done!\nResults are: "
-              << f1.get() << ' ' << f2.get() << ' ' << f3.get() << '\n';
-    t.join();
-}
 
 int detach() {
     promise<int> taskPromise;
@@ -43,47 +22,77 @@ int detach() {
 
 //    robotThread.join();
     cout << "ending" << '\n';
-
+    return 0;
 }
 
-void foo()
-{
-    // simulate expensive operation
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-}
-
-void bar()
-{
-    // simulate expensive operation
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-}
-
-int join()
-{
-    std::cout << "starting first helper...\n";
-    std::thread helper1(foo);
-
-    std::cout << "starting second helper...\n";
-    std::thread helper2(bar);
-
-    std::cout << "waiting for helpers to finish..." << std::endl;
-    helper1.join();
-    helper2.join();
-
-    std::cout << "done!\n";
-}
-
-void taskRobot() {
+void workTask1() {
     std::cout << "started a robot task." << std::endl;
     this_thread::sleep_for(chrono::seconds(3));
     std::cout << "ended a robot task." << std::endl;
 }
 
 int detachJoin() {
-    thread threadRobot(taskRobot);
+    thread threadRobot(workTask1);
     threadRobot.detach();
 //    threadRobot.join();
 
     this_thread::sleep_for(chrono::seconds(2));
     std::cout << "exiting main.." << std::endl;
+    return 0;
+}
+
+
+void accumulate(std::vector<int>::iterator first,
+                std::vector<int>::iterator last,
+                std::promise<int> accumulate_promise)
+{
+    int sum = std::accumulate(first, last, 0);
+    accumulate_promise.set_value(sum);  // Notify future
+}
+
+void do_work(std::promise<void> barrier)
+{
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    barrier.set_value();
+}
+
+int signalThreadsUsingPromise()
+{
+//    // Demonstrate using promise<int> to transmit a result between threads.
+//    std::vector<int> numbers = { 1, 2, 3, 4, 5, 6 };
+//    std::promise<int> accumulate_promise;
+//    std::future<int> accumulate_future = accumulate_promise.get_future();
+//    std::thread work_thread(accumulate, numbers.begin(), numbers.end(),
+//                            std::move(accumulate_promise));
+//
+//    // future::get() will wait until the future has a valid result and retrieves it.
+//    // Calling wait() before get() is not needed
+//    //accumulate_future.wait();  // wait for result
+//    std::cout << "result=" << accumulate_future.get() << '\n';
+//    work_thread.join();  // wait for thread completion
+
+    // Demonstrate using promise<void> to signal state between threads.
+    std::promise<void> barrier;
+    std::future<void> barrier_future = barrier.get_future();
+    std::thread new_work_thread(do_work, std::move(barrier));
+    barrier_future.wait();
+    new_work_thread.join();
+}
+
+void workTask2(std::promise<void> taskPromise) {
+    std::cout << "started a robot task." << std::endl;
+    this_thread::sleep_for(chrono::seconds(3));
+    taskPromise.set_value();
+    std::cout << "ended a robot task." << std::endl;
+}
+
+int main() {
+    promise<void> taskPromise;
+    future<void> taskFuture = taskPromise.get_future();
+    thread robotThread(workTask2, move(taskPromise));
+    taskFuture.wait();
+
+    cout << "starting join" << endl;
+    robotThread.join();
+    cout << "ending join" << endl;
 }
