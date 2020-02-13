@@ -41,13 +41,13 @@ struct NodeSpec {
 // map<node.id, node>
 map<int, NodeSpec> _mapNode;
 void readNodes(const cv::String& path) {
-    ifstream _file;
-    _file.open(path.c_str(), ifstream::in);
+    ifstream file;
+    file.open(path.c_str(), ifstream::in);
 
     string index, type;
     std::string line;
 
-    while (getline(_file, line)) {
+    while (getline(file, line)) {
         stringstream lineStream(line);
 
         getline(lineStream, index, separator);
@@ -58,7 +58,7 @@ void readNodes(const cv::String& path) {
         node.type = (type[0] == 'A') ? A : B;
         _mapNode[node.id] = node;
     }
-    _file.close();
+    file.close();
 }
 
 vector<vector<int>> _setOfPaths;
@@ -294,6 +294,19 @@ int startRobot(int robotId) {
     return time;
 }
 
+bool writeTimeFile(const string &fileName, const int& robotId, const int& time) {
+    std::fstream file;
+    file.open (fileName, std::ios::out | std::ios::app);
+    if (file) {
+        file << robotId << "," << time << endl;
+        file.close();
+        return true;
+    } else {
+        file.close();
+        return false;
+    }
+}
+
 
 int main() {
     printCWD();
@@ -303,11 +316,15 @@ int main() {
 
     configureTaskTimes();
 
-    const int totalRunningRobots = 4;
     int totalEstimatedTime = 0;
+    const int totalRunningRobots = 4;
+    string timeFileName = "../times.csv";
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
-        std::cout << "R-" << robotId << ": minimum run time:" << measure / secondsInHour << " hours.\n";
+        if (! writeTimeFile(timeFileName, robotId, measure)) {
+            std::cerr << "Failed to write to file: " << timeFileName << endl;
+        }
+        std::cout << "R-" << robotId << ": minimum run time:" << measure << " secs.\n";
         std::cout << printCircuit(robotId) << "\n";
         totalEstimatedTime += measure;
     }
