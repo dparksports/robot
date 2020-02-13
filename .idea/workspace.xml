@@ -13,7 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3f9e9ffd-a6d1-4259-91df-83015d5d8413" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/main.cpp.o" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,7 +59,7 @@
       <option name="presentableId" value="Default" />
       <updated>1581218849555</updated>
       <workItem from="1581218851961" duration="19159000" />
-      <workItem from="1581561949187" duration="13722000" />
+      <workItem from="1581561949187" duration="15210000" />
     </task>
     <servers />
   </component>
@@ -107,5 +107,20 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="320" y="176" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1581227930235" />
+    <state x="240" y="184" width="545" height="716" key="refactoring.ChangeSignatureDialog" timestamp="1581579354329">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="240" y="184" width="545" height="716" key="refactoring.ChangeSignatureDialog/0.23.1440.877@0.23.1440.877" timestamp="1581579354329" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/main.cpp</url>
+          <line>371</line>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

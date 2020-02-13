@@ -36,6 +36,7 @@ enum NodeType {A, B};
 struct NodeSpec {
     int id;
     NodeType type;
+    vector<int> visitedRobotIds;
 };
 
 // map<node.id, node>
@@ -93,7 +94,7 @@ void readPaths(const cv::String& path) {
 
 enum RobotType { mover, organizer};
 struct RobotSpec {
-    int number;
+    int id;
     RobotType type;
     int speed;
     int measuredTime;
@@ -115,10 +116,10 @@ void readRobots(const cv::String& path) {
         getline(lineStream, speed);
 
         RobotSpec robot;
-        robot.number = StringToInt(index);
+        robot.id = StringToInt(index);
         robot.speed = StringToInt(speed);
         robot.type = (type[0] == 'm') ? mover : organizer;
-        _robots[robot.number] = robot;
+        _robots[robot.id] = robot;
     }
     _file.close();
 }
@@ -241,24 +242,36 @@ struct Billboard {
     mutex nodeMutex;
 };
 
+void logRobotArrived(const NodeSpec &node, int taskTime, int robotId);
+
 map<int, Billboard> _billboards;
 mutex functionMutex;
 
-int reserveBillboard(int nodeId, int taskTime, int robotId) {
-    Billboard &billboard = _billboards[nodeId];
+int reserveBillboard(NodeSpec& node, int taskTime, int robotId) {
+    Billboard &billboard = _billboards[node.id];
     if (billboard.nodeId == 0) {
-        billboard.nodeId = nodeId;
+        billboard.nodeId = node.id;
     }
 
-    {
-        stringstream stream;
-        stream << printTime() << nodeId << ": R" << robotId << ": arrived & working for " << taskTime << " secs." << "\n";
-        string log = stream.str();
-        cout << log;
-    }
+    logRobotWorking(node, taskTime, robotId);
     const lock_guard<std::mutex> nodeLockGuard(billboard.nodeMutex);
+    node.visitedRobotIds.push_back(robotId);
     std::this_thread::sleep_for(std::chrono::seconds(taskTime));
-    return nodeId;
+    return node.id;
+}
+
+void logRobotWorking(const NodeSpec &node, int taskTime, int robotId) {
+    stringstream stream;
+    stream << printTime() << node.id << ": R" << robotId << ": arrived & working for " << taskTime << " secs." << "\n";
+    string log = stream.str();
+    cout << log;
+}
+
+void logRobotTraveling(const NodeSpec &node, const RobotSpec& robot, int travelTime) {
+    stringstream stream;
+    stream << printTime() << node.id << ": R" << robot.id << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << ": run time: " << robot.measuredTime << " secs \n";
+    string log = stream.str();
+    cout << log;
 }
 
 const int secondsInHour = 3600;
@@ -280,15 +293,9 @@ int startRobot(int robotId) {
         time += taskTimeInt;
         robot.measuredTime += time;
 
-        {
-            stringstream stream;
-            stream << printTime() << node.id << ": R" << robotId << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << ": run time: " << robot.measuredTime << " secs \n";
-            string log = stream.str();
-            cout << log;
-        }
-
+        logRobotTraveling(node, robot, travelTime);
         std::this_thread::sleep_for(std::chrono::seconds(travelTime));
-        reserveBillboard(node.id,taskTimeInt,robotId);
+        reserveBillboard(node,taskTimeInt,robotId);
     }
 
     return time;
@@ -307,6 +314,28 @@ bool writeTimeFile(const string &fileName, const int& robotId, const int& time) 
     }
 }
 
+bool writeVisitFile(const string &fileName) {
+    std::fstream file;
+    file.open (fileName, std::ios::out | std::ios::app);
+
+    if (file) {
+        for (int nodeId = 0; nodeId < _mapNode.size(); ++nodeId) {
+            NodeSpec node = _mapNode[nodeId];
+            file << node.id << ",";
+
+            for (int i = 0; i < node.visitedRobotIds.size(); ++i) {
+                file << node.visitedRobotIds[i];
+            }
+            file << endl;
+        }
+
+        file.close();
+        return true;
+    } else {
+        file.close();
+        return false;
+    }
+}
 
 int main() {
     printCWD();
@@ -340,5 +369,6 @@ int main() {
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(totalEstimatedTime));
+    writeVisitFile("../visited.csv");
     return 0;
 }
