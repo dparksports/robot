@@ -212,13 +212,14 @@ string printCircuit(const int& robotId) {
         NodeSpec node = _mapNode[nodeId];
 
         if (node.type == A) {
-            stream << "pathIndex:" << pathIndex << " node.id:" << node.id << "(A)";
+            stream << node.id;
         } else {
-            stream << "pathIndex:" << pathIndex << " node.id:" << node.id << "(B)";
+            stream << node.id;
         }
 
         if (pathIndex + 1 != circuit.size()) {
-            stream << " --> ";
+//            stream << "-> ";
+            stream << "\n";
         }
     }
 
@@ -262,9 +263,11 @@ int startRobot(int robotId) {
     for (int nodeIndex = 0; nodeIndex < circuit.size(); ++nodeIndex) {
         NodeSpec node = _mapNode[nodeIndex];
 
-        // assumption: a robot starts at the node zero.
-        // So, no traveling needed.
-        int travelTime = (nodeIndex == 0) ? 0 : robot.speed;
+        // robot is placed at the first node.
+        //        int travelTime = (nodeId == 0) ? 0 : robot.speed;
+
+        // robot needs to travel to the first node.
+        int travelTime = robot.speed;
         time += travelTime;
 
         int taskTimeInt = taskTime(robot, node);
@@ -288,11 +291,11 @@ int main() {
     configureTaskTimes();
 
     for (int robotId = 0; robotId < 4; ++robotId) {
-        printCircuit(robotId);
-        std::cout << "R(" << robotId << "): minimum time:" << measureTime(robotId) << " secs.\n";
+        std::cout << "R(" << robotId << "): minimum run time without node queuing:" << measureTime(robotId) << " secs.\n";
+        std::cout << printCircuit(robotId) << "\n";
     }
 
-    for (int robotId = 0; robotId < 2; ++robotId) {
+    for (int robotId = 0; robotId < 1; ++robotId) {
         std::packaged_task<int(int)> reserveTask(startRobot);
         std::future<int> reserveFuture = reserveTask.get_future();
         std::thread reserveThread(std::move(reserveTask), robotId);
