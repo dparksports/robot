@@ -286,7 +286,7 @@ int startRobot(int robotId) {
 
         {
             stringstream stream;
-            stream << printTime() << node.id << ": R" << robotId << ": traveling, assigned task:" << taskString(robot, node) << "\n";
+            stream << printTime() << node.id << ": R" << robotId << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << "\n";
             string log = stream.str();
             cout << log;
         }
