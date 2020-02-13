@@ -12,23 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f9e9ffd-a6d1-4259-91df-83015d5d8413" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/CXX.includecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/DependInfo.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/build.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/depend.internal" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/depend.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/robot.dir/main.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/robot.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/robot.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/robot" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/robot" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -74,7 +59,7 @@
       <option name="presentableId" value="Default" />
       <updated>1581218849555</updated>
       <workItem from="1581218851961" duration="19159000" />
-      <workItem from="1581561949187" duration="134000" />
+      <workItem from="1581561949187" duration="477000" />
     </task>
     <servers />
   </component>
@@ -86,38 +71,38 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="477" height="438" key="DebuggerActiveHint/0.23.1440.877@0.23.1440.877" timestamp="1581290049739" />
-    <state width="1398" height="200" key="GridCell.Tab.0.bottom" timestamp="1581294792327">
+    <state width="1398" height="279" key="GridCell.Tab.0.bottom" timestamp="1581562366544">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="200" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1581294792327" />
-    <state width="1398" height="200" key="GridCell.Tab.0.center" timestamp="1581294792326">
+    <state width="1398" height="279" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1581562366544" />
+    <state width="1398" height="279" key="GridCell.Tab.0.center" timestamp="1581562366542">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="200" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1581294792326" />
-    <state width="1398" height="200" key="GridCell.Tab.0.left" timestamp="1581294792326">
+    <state width="1398" height="279" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1581562366542" />
+    <state width="1398" height="279" key="GridCell.Tab.0.left" timestamp="1581562366542">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="200" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1581294792326" />
-    <state width="1398" height="200" key="GridCell.Tab.0.right" timestamp="1581294792327">
+    <state width="1398" height="279" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1581562366542" />
+    <state width="1398" height="279" key="GridCell.Tab.0.right" timestamp="1581562366543">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="200" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1581294792327" />
-    <state width="1398" height="200" key="GridCell.Tab.1.bottom" timestamp="1581294792329">
+    <state width="1398" height="279" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1581562366543" />
+    <state width="1398" height="279" key="GridCell.Tab.1.bottom" timestamp="1581562366545">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="200" key="GridCell.Tab.1.bottom/0.23.1440.877@0.23.1440.877" timestamp="1581294792329" />
-    <state width="1398" height="200" key="GridCell.Tab.1.center" timestamp="1581294792328">
+    <state width="1398" height="279" key="GridCell.Tab.1.bottom/0.23.1440.877@0.23.1440.877" timestamp="1581562366545" />
+    <state width="1398" height="279" key="GridCell.Tab.1.center" timestamp="1581562366545">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="200" key="GridCell.Tab.1.center/0.23.1440.877@0.23.1440.877" timestamp="1581294792328" />
-    <state width="1398" height="200" key="GridCell.Tab.1.left" timestamp="1581294792328">
+    <state width="1398" height="279" key="GridCell.Tab.1.center/0.23.1440.877@0.23.1440.877" timestamp="1581562366545" />
+    <state width="1398" height="279" key="GridCell.Tab.1.left" timestamp="1581562366544">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="200" key="GridCell.Tab.1.left/0.23.1440.877@0.23.1440.877" timestamp="1581294792328" />
-    <state width="1398" height="200" key="GridCell.Tab.1.right" timestamp="1581294792329">
+    <state width="1398" height="279" key="GridCell.Tab.1.left/0.23.1440.877@0.23.1440.877" timestamp="1581562366544" />
+    <state width="1398" height="279" key="GridCell.Tab.1.right" timestamp="1581562366545">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="200" key="GridCell.Tab.1.right/0.23.1440.877@0.23.1440.877" timestamp="1581294792329" />
+    <state width="1398" height="279" key="GridCell.Tab.1.right/0.23.1440.877@0.23.1440.877" timestamp="1581562366545" />
     <state x="320" y="176" key="Vcs.Push.Dialog.v2" timestamp="1581227930235">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
