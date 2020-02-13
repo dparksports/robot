@@ -79,7 +79,7 @@ void readPaths(const cv::String& path) {
         int robotIdInt = StringToInt(robotId);
 
         if (currentRobotId != robotIdInt) {
-            // supports a non predefined number of nodes per circuit.
+            // works with any number of nodes per circuit, not just 1000.
             currentRobotId = robotIdInt;
             vector<int> newCircuit;
             _setOfPaths.push_back(newCircuit);
@@ -196,6 +196,29 @@ int measureTime(const int& robotId) {
     return time;
 }
 
+string printCircuit(const int& robotId) {
+    vector<int> circuit = _setOfPaths[robotId];
+    RobotSpec robot = _robots[robotId];
+
+    stringstream stream;
+    for (int nodeId = 0; nodeId < circuit.size(); ++nodeId) {
+        NodeSpec node = _mapNode[nodeId];
+
+        if (node.type == A) {
+            stream << node.id << "(A)";
+        } else {
+            stream << node.id << "(B)";
+        }
+
+        if (nodeId + 1 != circuit.size()) {
+            stream << " --> ";
+        }
+    }
+
+    return stream.str();
+}
+
+
 struct Billboard {
     int nodeId;
     mutex nodeMutex;
@@ -229,20 +252,20 @@ int startRobot(int robotId) {
     RobotSpec robot = _robots[robotId];
 
     int time = 0;
-    for (int nodeId = 0; nodeId < circuit.size(); ++nodeId) {
-        NodeSpec node = _mapNode[nodeId];
+    for (int nodeIndex = 0; nodeIndex < circuit.size(); ++nodeIndex) {
+        NodeSpec node = _mapNode[nodeIndex];
 
         // assumption: a robot starts at the node zero.
         // So, no traveling needed.
-        int travelTime = (nodeId == 0) ? 0 : robot.speed;
+        int travelTime = (nodeIndex == 0) ? 0 : robot.speed;
         time += travelTime;
 
         int taskTimeInt = taskTime(robot, node);
         time += taskTimeInt;
 
-        cout << "R(" << robotId << "): traveling:" << travelTime << " node:" << nodeId << " task:" << taskString(robot, node) << "\n";
+        cout << "R(" << robotId << "): traveling:" << travelTime << " node:" << nodeIndex << " task:" << taskString(robot, node) << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(travelTime));
-        reserveBillboard(nodeId,taskTimeInt,robotId);
+        reserveBillboard(node.id,taskTimeInt,robotId);
         cout << "R(" << robotId << "): accumulated time:" << time << "\n";
     }
 
@@ -257,14 +280,19 @@ int main() {
 
     configureTaskTimes();
 
-    for (int robotId = 0; robotId < 1; ++robotId) {
+    for (int robotId = 0; robotId < 4; ++robotId) {
+        printCircuit(robotId);
+        std::cout << "R(" << robotId << "): minimum time:" << measureTime(robotId) << " secs.\n";
+    }
+
+    for (int robotId = 0; robotId < 2; ++robotId) {
         std::packaged_task<int(int)> reserveTask(startRobot);
         std::future<int> reserveFuture = reserveTask.get_future();
         std::thread reserveThread(std::move(reserveTask), robotId);
         reserveThread.detach();
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(600));
+    std::this_thread::sleep_for(std::chrono::seconds(1200));
     std::cout << "main end " << '\n';
     return 0;
 }
