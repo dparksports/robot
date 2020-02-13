@@ -1,18 +1,18 @@
 #include <fstream>
+#include <sstream>
 #include <iostream>
 #include <filesystem>
-
-#include <string>
-#include <cstdio>
 
 #include <map>
 #include <vector>
 
 #include <opencv2/core/core.hpp>
-#include <sstream>
 #include "boost/filesystem.hpp"   // includes all needed Boost.Filesystem declarations
 
-//using boost::filesystem;
+#include <thread>
+#include <future>
+#include <mutex>
+#include <chrono>
 
 using namespace std;
 using namespace cv;
@@ -31,7 +31,7 @@ int StringToInt ( const std::string &Text ) {
     return ss >> result ? result : 0;
 }
 
-enum NodeType { A, B};
+enum NodeType {A, B};
 struct NodeSpec {
     int id;
     NodeType type;
@@ -121,16 +121,14 @@ void readRobots(const cv::String& path) {
 }
 
 map<string, int> _robotTaskTimes;
-void configureTaskTimes()
-{
+void configureTaskTimes() {
     _robotTaskTimes["mover-push"] = 20;
     _robotTaskTimes["mover-pull"] = 35;
     _robotTaskTimes["organizer-pick"] = 30;
     _robotTaskTimes["organizer-place"] = 45;
 }
 
-int taskTime(const RobotSpec& robot, const NodeSpec& node)
-{
+int taskTime(const RobotSpec& robot, const NodeSpec& node) {
     int taskTime = 0;
     if (robot.type == mover) {
         if (node.type == A) {
@@ -171,6 +169,90 @@ int measureTime(const int& robotId) {
     return time;
 }
 
+struct Billboard {
+    int nodeId;
+    mutex nodeMutex;
+};
+
+map<int, Billboard> _billboards;
+mutex functionMutex;
+int reserveBillboard(int nodeId, int taskTime, int robotId) {
+    {
+        stringstream stream;
+        stream << this_thread::get_id() << " nodeId:" << nodeId << " robotId:" << robotId << '\n';
+        string log = stream.str();
+        cout << log;
+    }
+
+    const lock_guard<std::mutex> functionGuard(functionMutex);
+    Billboard& billboard = _billboards[nodeId];
+    if (billboard.nodeId == 0) {
+        billboard.nodeId = nodeId;
+        cout  << this_thread::get_id() << " billboard.nodeId:" << billboard.nodeId << " nodeId:" << nodeId << " robotId:" << robotId << " Created" << '\n';
+    }
+
+    cout << " nodeId:" << nodeId << " robotId:" << robotId << " taskTime:" << taskTime << '\n';
+    const lock_guard<std::mutex> nodeLockGuard(billboard.nodeMutex);
+    std::this_thread::sleep_for(std::chrono::seconds(taskTime));
+//    cout  << "End:" << this_thread::get_id() << '\n';
+    cout  << this_thread::get_id() << " billboard.nodeId:" << billboard.nodeId << " nodeId:" << nodeId << " robotId:" << robotId << " Completed" << '\n';
+
+    return nodeId;
+}
+
+void mainLockGuard() {
+    int taskTime = 3;
+    int nodeId = 123;
+    int robotId = 0;
+
+    for (int i = 0; i < 5; ++i) {
+        std::packaged_task<int(int, int, int)> reserveTask(reserveBillboard);
+        std::future<int> reserveFuture = reserveTask.get_future();
+        std::thread reserveThread(std::move(reserveTask), nodeId, taskTime, robotId);
+        reserveThread.detach();
+        robotId++;
+    }
+
+//    taskTime = 20;
+//    nodeId = 888;
+//    robotId = 777;
+//    std::packaged_task<int(int, int, int)> reserveTask(reserveBillboard);
+//    std::future<int> reserveFuture = reserveTask.get_future();
+//    std::thread reserveThread(std::move(reserveTask), nodeId, taskTime, robotId);
+//    reserveThread.join();
+
+    std::this_thread::sleep_for(std::chrono::seconds(30));
+    std::cout << "main end " << '\n';
+}
+
+int startRobot(const int& robotId) {
+    vector<int> circuit = _setOfPaths[robotId];
+    RobotSpec robot = _robots[robotId];
+
+    int time = 0;
+    for (int nodeId = 0; nodeId < circuit.size(); ++nodeId) {
+        NodeSpec node = _mapNode[nodeId];
+
+        // assumption: a robot starts at the node zero.
+        // So, no traveling needed.
+        int travelTime = (nodeId == 0) ? 0 : robot.speed;
+        time += travelTime;
+
+        int taskTimeInt = taskTime(robot, node);
+        time += taskTimeInt;
+
+        cout << " nodeId:" << nodeId << " robotId:" << robotId << " Traveling:" << travelTime << '\n';
+        std::this_thread::sleep_for(std::chrono::seconds(travelTime));
+        std::packaged_task<int(int, int, int)> reserveTask(reserveBillboard);
+        std::future<int> reserveFuture = reserveTask.get_future();
+        std::thread reserveThread(std::move(reserveTask), nodeId, taskTimeInt, robotId);
+        reserveThread.join();
+    }
+
+    return time;
+}
+
+
 int main() {
     printCWD();
     readNodes("../nodes_input.csv");
@@ -180,20 +262,23 @@ int main() {
     configureTaskTimes();
 
     int robotId = 0;
-    int timeSigma = measureTime(robotId);
+    int timeSigma = startRobot(robotId);
     std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
 
-    robotId = 1;
-    timeSigma = measureTime(robotId);
-    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(600));
+    std::cout << "main end " << '\n';
 
-    robotId = 2;
-    timeSigma = measureTime(robotId);
-    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
-
-    robotId = 3;
-    timeSigma = measureTime(robotId);
-    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
+//    robotId = 1;
+//    timeSigma = measureTime(robotId);
+//    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
+//
+//    robotId = 2;
+//    timeSigma = measureTime(robotId);
+//    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
+//
+//    robotId = 3;
+//    timeSigma = measureTime(robotId);
+//    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
 
     return 0;
 }
