@@ -228,7 +228,7 @@ mutex functionMutex;
 int reserveBillboard(int nodeId, int taskTime, int robotId) {
     {
         stringstream stream;
-        stream << "R-" << robotId << "): arrived(" << nodeId << ") <" << this_thread::get_id() << ">\n";
+        stream << nodeId << ": R" << robotId << ": arrived      <" << this_thread::get_id() << ">\n";
         string log = stream.str();
         cout << log;
     }
@@ -239,10 +239,14 @@ int reserveBillboard(int nodeId, int taskTime, int robotId) {
         billboard.nodeId = nodeId;
     }
 
-    cout << "R-" << robotId << ": working(" << nodeId << ")\n";
+    {
+        stringstream stream;
+        stream << nodeId << ": R" << robotId << ": working" << "\n";
+        string log = stream.str();
+        cout << log;
+    }
     const lock_guard<std::mutex> nodeLockGuard(billboard.nodeMutex);
     std::this_thread::sleep_for(std::chrono::seconds(taskTime));
-//    cout << "R(" << robotId << "): completed:" << " node(" << nodeId << ") <" << this_thread::get_id() << ">\n";
     return nodeId;
 }
 
@@ -262,8 +266,12 @@ int startRobot(int robotId) {
         int taskTimeInt = taskTime(robot, node);
         time += taskTimeInt;
 
-//        cout << "R(" << robotId << "): traveling:" << travelTime << "  path:" << pathIndex << "(" << node.id << ") task:" << taskString(robot, node) << "\n";
-        cout << "R-" << robotId << ": traveling(" << node.id << ") assigned task:" << taskString(robot, node) << "\n";
+        {
+            stringstream stream;
+            stream << node.id << ": R" << robotId << ": traveling, assigned task:" << taskString(robot, node) << "\n";
+            string log = stream.str();
+            cout << log;
+        }
         std::this_thread::sleep_for(std::chrono::seconds(travelTime));
         reserveBillboard(node.id,taskTimeInt,robotId);
 //        cout << "R-" << robotId << ":  time:" << time << "\n";
@@ -281,7 +289,7 @@ int main() {
     configureTaskTimes();
 
     const int secondsInHour = 3600;
-    const int totalRunningRobots = 3;
+    const int totalRunningRobots = 4;
     int totalTime = 0;
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
