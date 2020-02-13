@@ -286,7 +286,7 @@ int startRobot(int robotId) {
 
     for (int pathIndex = 0; pathIndex < circuit.size(); ++pathIndex) {
         int nodeId = circuit.at(pathIndex);
-        NodeSpec node = _mapNode[nodeId];
+        NodeSpec& node = _mapNode[nodeId];
 
         // robot starts from the first node.
         int travelTime = (pathIndex == 0) ? 0 : robot.speed;
@@ -299,6 +299,11 @@ int startRobot(int robotId) {
         std::this_thread::sleep_for(std::chrono::milliseconds(travelTime));
         reserveBillboard(pathIndex, node,taskTimeInt,robotId);
         logRuntime(pathIndex, node, robot);
+        {
+            int nodeId = 134;
+            NodeSpec& inspectNode = _mapNode[nodeId];
+            cout << inspectNode.visitedRobotIds.at(0) << endl;
+        }
     }
 
     return robot.measuredTime;
@@ -328,6 +333,10 @@ bool writeVisitFile(const string &fileName) {
 
             for (int i = 0; i < node.visitedRobotIds.size(); ++i) {
                 file << node.visitedRobotIds[i];
+
+                if (i + 1 != node.visitedRobotIds.size()) {
+                    file << ",";
+                }
             }
             file << endl;
         }
@@ -349,7 +358,7 @@ int main() {
     configureTaskTimes();
 
     int totalEstimatedTime = 0;
-    const int totalRunningRobots = 1;
+    const int totalRunningRobots = 3;
     string timeFileName = "../times.csv";
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
@@ -371,7 +380,7 @@ int main() {
         reserveThread.detach();
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(600));
+    std::this_thread::sleep_for(std::chrono::seconds(60 * 2));
     writeVisitFile("../visited.csv");
     return 0;
 }
