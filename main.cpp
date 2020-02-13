@@ -233,7 +233,7 @@ int reserveBillboard(int nodeId, int taskTime, int robotId) {
         cout << log;
     }
 
-    const lock_guard<std::mutex> functionGuard(functionMutex);
+//    const lock_guard<std::mutex> functionGuard(functionMutex);
     Billboard &billboard = _billboards[nodeId];
     if (billboard.nodeId == 0) {
         billboard.nodeId = nodeId;
@@ -241,7 +241,7 @@ int reserveBillboard(int nodeId, int taskTime, int robotId) {
 
     {
         stringstream stream;
-        stream << nodeId << ": R" << robotId << ": working" << "\n";
+        stream << nodeId << ": R" << robotId << ": working for " << taskTime << " secs." << "\n";
         string log = stream.str();
         cout << log;
     }
@@ -289,7 +289,7 @@ int main() {
     configureTaskTimes();
 
     const int secondsInHour = 3600;
-    const int totalRunningRobots = 4;
+    const int totalRunningRobots = 2;
     int totalTime = 0;
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
@@ -299,7 +299,7 @@ int main() {
     }
 
     std::cout << "Starting Path Simulation.\n";
-    std::cout << "Estimated Total Run Time:" << totalTime / secondsInHour << "hours. \n";
+    std::cout << "Estimated Total Run Time: " << totalTime / secondsInHour << " hours. \n";
 
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         std::packaged_task<int(int)> reserveTask(startRobot);
