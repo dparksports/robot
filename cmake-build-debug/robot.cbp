@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\usr\local\lib\cmake\opencv4\;CMake Files\..\..\..\..\usr\local\lib\cmake\Boost-1.72.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_headers-1.72.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_date_time-1.72.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_filesystem-1.72.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_iostreams-1.72.0\;CMake Files\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\usr\local\share\eigen3\;CMake Files\..\..\..\..\usr\local\share\eigen3\cmake\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/Users/5dof/CLionProjects/robot/cmake-build-debug"/>
+				<Option working_dir="/Users/5dof/CLionProjects/robot3/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/Users/5dof/CLionProjects/robot/cmake-build-debug"/>
+				<Option working_dir="/Users/5dof/CLionProjects/robot3/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/Users/5dof/CLionProjects/robot/cmake-build-debug"/>
+				<Option working_dir="/Users/5dof/CLionProjects/robot3/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="robot">
-				<Option output="/Users/5dof/CLionProjects/robot/cmake-build-debug/robot" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/5dof/CLionProjects/robot/cmake-build-debug"/>
+				<Option output="/Users/5dof/CLionProjects/robot3/cmake-build-debug/robot" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/5dof/CLionProjects/robot3/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -58,15 +58,15 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 robot"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 robot"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="robot/fast">
-				<Option output="/Users/5dof/CLionProjects/robot/cmake-build-debug/robot" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/5dof/CLionProjects/robot/cmake-build-debug"/>
+				<Option output="/Users/5dof/CLionProjects/robot3/cmake-build-debug/robot" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/5dof/CLionProjects/robot3/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -85,89 +85,89 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 robot/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 robot/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/5dof/CLionProjects/robot3/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/5dof/CLionProjects/robot/main.cpp">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/main.cpp">
 			<Option target="robot"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/CMakeLists.txt">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/BoostDetectToolset-1.72.0.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/BoostDetectToolset-1.72.0.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/opencv4/OpenCVConfig-version.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/opencv4/OpenCVConfig-version.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/opencv4/OpenCVConfig.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/opencv4/OpenCVConfig.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/opencv4/OpenCVModules-release.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/opencv4/OpenCVModules-release.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/opencv4/OpenCVModules.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/opencv4/OpenCVModules.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/Boost-1.72.0/BoostConfig.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/Boost-1.72.0/BoostConfig.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\Boost-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/Boost-1.72.0/BoostConfigVersion.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/Boost-1.72.0/BoostConfigVersion.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\Boost-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_headers-1.72.0/boost_headers-config-version.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_headers-1.72.0/boost_headers-config-version.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_headers-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_headers-1.72.0/boost_headers-config.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_headers-1.72.0/boost_headers-config.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_headers-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_date_time-1.72.0/boost_date_time-config-version.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_date_time-1.72.0/boost_date_time-config-version.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_date_time-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_date_time-1.72.0/boost_date_time-config.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_date_time-1.72.0/boost_date_time-config.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_date_time-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_date_time-1.72.0/libboost_date_time-variant-shared.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_date_time-1.72.0/libboost_date_time-variant-shared.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_date_time-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_date_time-1.72.0/libboost_date_time-variant-static.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_date_time-1.72.0/libboost_date_time-variant-static.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_date_time-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_filesystem-1.72.0/boost_filesystem-config-version.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_filesystem-1.72.0/boost_filesystem-config-version.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_filesystem-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_filesystem-1.72.0/boost_filesystem-config.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_filesystem-1.72.0/boost_filesystem-config.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_filesystem-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_filesystem-1.72.0/libboost_filesystem-variant-shared.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_filesystem-1.72.0/libboost_filesystem-variant-shared.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_filesystem-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_filesystem-1.72.0/libboost_filesystem-variant-static.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_filesystem-1.72.0/libboost_filesystem-variant-static.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_filesystem-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_iostreams-1.72.0/boost_iostreams-config-version.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_iostreams-1.72.0/boost_iostreams-config-version.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_iostreams-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_iostreams-1.72.0/boost_iostreams-config.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_iostreams-1.72.0/boost_iostreams-config.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_iostreams-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_iostreams-1.72.0/libboost_iostreams-variant-shared.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_iostreams-1.72.0/libboost_iostreams-variant-shared.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_iostreams-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/lib/cmake/boost_iostreams-1.72.0/libboost_iostreams-variant-static.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/lib/cmake/boost_iostreams-1.72.0/libboost_iostreams-variant-static.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\boost_iostreams-1.72.0\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/share/eigen3/cmake/Eigen3Config.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/share/eigen3/cmake/Eigen3Config.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\eigen3\cmake\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/share/eigen3/cmake/Eigen3ConfigVersion.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/share/eigen3/cmake/Eigen3ConfigVersion.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\eigen3\cmake\"/>
 		</Unit>
-		<Unit filename="/Users/5dof/CLionProjects/robot/../../../../usr/local/share/eigen3/cmake/Eigen3Targets.cmake">
+		<Unit filename="/Users/5dof/CLionProjects/robot3/../../../../usr/local/share/eigen3/cmake/Eigen3Targets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\eigen3\cmake\"/>
 		</Unit>
 	</Project>
