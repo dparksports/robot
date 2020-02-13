@@ -1,10 +1,13 @@
-#include <vector>
-#include <map>
-
-#include <numeric>
-#include <iostream>
+#include <fstream>
 #include <sstream>
-#include <string>
+#include <iostream>
+#include <filesystem>
+
+#include <map>
+#include <vector>
+
+#include <opencv2/core/core.hpp>
+#include "boost/filesystem.hpp"   // includes all needed Boost.Filesystem declarations
 
 #include <thread>
 #include <future>
@@ -12,122 +15,164 @@
 #include <chrono>
 
 using namespace std;
+using namespace cv;
 
-void detach() {
-    promise<int> taskPromise;
-    std::future<int> taskFuture = taskPromise.get_future();
-    std::thread robotThread = std::thread([&taskPromise]{
-        cout << "Thread closure:" << '\n';
-        taskPromise.set_value_at_thread_exit(8);
-    });
-    robotThread.detach();
+char separator = ',';
 
-    cout << "Wait For Task Completion" << '\n';
-    taskFuture.wait();
-    cout << taskFuture.get() << '\n';
-
-//    robotThread.join();
-    cout << "ending" << '\n';
+void printCWD() {
+    std::filesystem::path cwd = std::filesystem::current_path() / "robot";
+    std::ofstream file(cwd.string());
+    file.close();
 }
 
-void workTask1() {
-    std::cout << "started a robot task." << std::endl;
-    this_thread::sleep_for(chrono::seconds(3));
-    std::cout << "ended a robot task." << std::endl;
+int StringToInt ( const std::string &Text ) {
+    std::istringstream ss(Text);
+    int result;
+    return ss >> result ? result : 0;
 }
 
-void detachJoin() {
-    thread threadRobot(workTask1);
-    threadRobot.detach();
-//    threadRobot.join();
+enum NodeType {A, B};
+struct NodeSpec {
+    int id;
+    NodeType type;
+};
 
-    this_thread::sleep_for(chrono::seconds(2));
-    std::cout << "exiting main.." << std::endl;
+map<int, NodeSpec> _mapNode;
+void readNodes(const cv::String& path) {
+    ifstream _file;
+    _file.open(path.c_str(), ifstream::in);
+
+    string index, type;
+    std::string line;
+
+    while (getline(_file, line)) {
+        stringstream lineStream(line);
+
+        getline(lineStream, index, separator);
+        getline(lineStream, type);
+
+        NodeSpec node;
+        node.id = StringToInt(index);
+        node.type = (type[0] == 'A') ? A : B;
+        _mapNode[node.id] = node;
+    }
+    _file.close();
 }
 
+vector<vector<int>> _setOfPaths;
+void readPaths(const cv::String& path) {
+    ifstream _file;
+    _file.open(path.c_str(), ifstream::in);
 
-void accumulate(std::vector<int>::iterator first,
-                std::vector<int>::iterator last,
-                std::promise<int> accumulate_promise)
-{
-    int sum = std::accumulate(first, last, 0);
-    accumulate_promise.set_value(sum);  // Notify future
+    string robotId, nodeId;
+    std::string line;
+
+    int currentRobotId = -1;
+
+    while (getline(_file, line)) {
+        stringstream lineStream(line);
+
+        getline(lineStream, robotId, separator);
+        getline(lineStream, nodeId);
+
+        int nodeIdInt = StringToInt(nodeId);
+        int robotIdInt = StringToInt(robotId);
+
+        if (currentRobotId != robotIdInt) {
+            // supports a non predefined number of nodes per circuit.
+            currentRobotId = robotIdInt;
+            vector<int> newCircuit;
+            _setOfPaths.push_back(newCircuit);
+        }
+        _setOfPaths[robotIdInt].push_back(nodeIdInt);
+    }
+    _file.close();
 }
 
-void do_work(std::promise<void> barrier)
-{
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    barrier.set_value();
+enum RobotType { mover, organizer};
+struct RobotSpec {
+    int number;
+    RobotType type;
+    int speed;
+};
+
+map<int, RobotSpec> _robots;
+void readRobots(const cv::String& path) {
+    ifstream _file;
+    _file.open(path.c_str(), ifstream::in);
+
+    string index, type, speed;
+    std::string line;
+
+    while (getline(_file, line)) {
+        stringstream lineStream(line);
+
+        getline(lineStream, index, separator);
+        getline(lineStream, type, separator);
+        getline(lineStream, speed);
+
+        RobotSpec robot;
+        robot.number = StringToInt(index);
+        robot.speed = StringToInt(speed);
+        robot.type = (type[0] == 'm') ? mover : organizer;
+        _robots[robot.number] = robot;
+    }
+    _file.close();
 }
 
-void signalThreadsUsingPromise() {
-//    // Demonstrate using promise<int> to transmit a result between threads.
-//    std::vector<int> numbers = { 1, 2, 3, 4, 5, 6 };
-//    std::promise<int> accumulate_promise;
-//    std::future<int> accumulate_future = accumulate_promise.get_future();
-//    std::thread work_thread(accumulate, numbers.begin(), numbers.end(),
-//                            std::move(accumulate_promise));
-//
-//    // future::get() will wait until the future has a valid result and retrieves it.
-//    // Calling wait() before get() is not needed
-//    //accumulate_future.wait();  // wait for result
-//    std::cout << "result=" << accumulate_future.get() << '\n';
-//    work_thread.join();  // wait for thread completion
+map<string, int> _robotTaskTimes;
+void configureTaskTimes() {
+    _robotTaskTimes["mover-push"] = 10;
+    _robotTaskTimes["mover-pull"] = 15;
+    _robotTaskTimes["organizer-pick"] = 6;
+    _robotTaskTimes["organizer-place"] = 8;
 
-    // Demonstrate using promise<void> to signal state between threads.
-    std::promise<void> barrier;
-    std::future<void> barrier_future = barrier.get_future();
-    std::thread new_work_thread(do_work, std::move(barrier));
-    barrier_future.wait();
-    new_work_thread.join();
+//    _robotTaskTimes["mover-push"] = 20;
+//    _robotTaskTimes["mover-pull"] = 35;
+//    _robotTaskTimes["organizer-pick"] = 30;
+//    _robotTaskTimes["organizer-place"] = 45;
 }
 
-void workTask2(std::promise<void> taskPromise) {
-    std::cout << "started a robot task." << std::endl;
-    this_thread::sleep_for(chrono::seconds(3));
-    taskPromise.set_value();
-    std::cout << "ended a robot task." << std::endl;
+int taskTime(const RobotSpec& robot, const NodeSpec& node) {
+    int taskTime = 0;
+    if (robot.type == mover) {
+        if (node.type == A) {
+            taskTime = _robotTaskTimes["mover-push"];
+        } else {
+
+            // node.type == B
+            taskTime = _robotTaskTimes["mover-pull"];
+        }
+    } else {
+        // robot.type == organizer
+
+        if (node.type == A) {
+            taskTime =  _robotTaskTimes["organizer-pick"];
+        } else {
+            // node.type == B
+            taskTime =  _robotTaskTimes["organizer-place"];
+        }
+    }
+    return taskTime;
 }
 
-void setValueByPromise() {
-    promise<void> taskPromise;
-    future<void> taskFuture = taskPromise.get_future();
-    thread robotThread(workTask2, move(taskPromise));
-    taskFuture.wait();
+int measureTime(const int& robotId) {
+    vector<int> circuit = _setOfPaths[robotId];
+    RobotSpec robot = _robots[robotId];
 
-    cout << "starting join" << endl;
-    robotThread.join();
-    cout << "ending join" << endl;
+    int time = 0;
+    for (int nodeId = 0; nodeId < circuit.size(); ++nodeId) {
+        NodeSpec node = _mapNode[nodeId];
 
+        int travelTime = (nodeId == 0) ? 0 : robot.speed;
+        time += travelTime;
+
+        int taskTimeInt = taskTime(robot, node);
+        time += taskTimeInt;
+    }
+
+    return time;
 }
-
-int g_i = 0;
-std::mutex g_i_mutex;  // protects g_i
-
-void safe_increment()
-{
-    const std::lock_guard<std::mutex> lock(g_i_mutex);
-    ++g_i;
-
-    std::cout << std::this_thread::get_id() << ": " << g_i << '\n';
-
-    // g_i_mutex is automatically released when lock
-    // goes out of scope
-}
-
-void lockGuardMutex()
-{
-    std::cout << "main: " << g_i << '\n';
-
-    std::thread t1(safe_increment);
-    std::thread t2(safe_increment);
-
-    t1.join();
-    t2.join();
-
-    std::cout << "main: " << g_i << '\n';
-}
-
 
 struct Billboard {
     int nodeId;
@@ -136,11 +181,11 @@ struct Billboard {
 
 map<int, Billboard> _billboards;
 mutex functionMutex;
-
 int reserveBillboard(int nodeId, int taskTime, int robotId) {
     {
         stringstream stream;
-        stream << this_thread::get_id() << " nodeId:" << nodeId << " robotId:" << robotId << '\n';
+//        stream << this_thread::get_id() << " nodeId:" << nodeId << " robotId:" << robotId << " Entered" << '\n';
+        stream << "R(" << robotId << "): arrived:"  << " at node(" << nodeId << ") " << this_thread::get_id() << "\n";
         string log = stream.str();
         cout << log;
     }
@@ -149,17 +194,18 @@ int reserveBillboard(int nodeId, int taskTime, int robotId) {
     Billboard& billboard = _billboards[nodeId];
     if (billboard.nodeId == 0) {
         billboard.nodeId = nodeId;
+//        cout  << this_thread::get_id() << " billboard.nodeId:" << billboard.nodeId << " nodeId:" << nodeId << " robotId:" << robotId << " Created" << '\n';
     }
 
+    cout << "R(" << robotId << "): working time:" << taskTime << " on node(" << nodeId << ")\n";
     const lock_guard<std::mutex> nodeLockGuard(billboard.nodeMutex);
     std::this_thread::sleep_for(std::chrono::seconds(taskTime));
-//    cout  << "End:" << this_thread::get_id() << '\n';
-    cout  << this_thread::get_id() << " billboard.nodeId:" << billboard.nodeId << " nodeId:" << nodeId << " robotId:" << robotId << " Succeded" << '\n';
+    cout << "R(" << robotId << "): completed:" << this_thread::get_id() << " on node(" << nodeId << ")\n";
 
     return nodeId;
 }
 
-int main() {
+void mainLockGuard() {
     int taskTime = 3;
     int nodeId = 123;
     int robotId = 0;
@@ -182,4 +228,62 @@ int main() {
 
     std::this_thread::sleep_for(std::chrono::seconds(30));
     std::cout << "main end " << '\n';
+}
+
+int startRobot(const int& robotId) {
+    vector<int> circuit = _setOfPaths[robotId];
+    RobotSpec robot = _robots[robotId];
+
+    int time = 0;
+    for (int nodeId = 0; nodeId < circuit.size(); ++nodeId) {
+        NodeSpec node = _mapNode[nodeId];
+
+        // assumption: a robot starts at the node zero.
+        // So, no traveling needed.
+        int travelTime = (nodeId == 0) ? 0 : robot.speed;
+        time += travelTime;
+
+        int taskTimeInt = taskTime(robot, node);
+        time += taskTimeInt;
+
+        cout << "R(" << robotId << "): traveling:" << travelTime << " to node(" << nodeId << ")\n";
+        std::this_thread::sleep_for(std::chrono::seconds(travelTime));
+        std::packaged_task<int(int, int, int)> reserveTask(reserveBillboard);
+        std::future<int> reserveFuture = reserveTask.get_future();
+        std::thread reserveThread(std::move(reserveTask), nodeId, taskTimeInt, robotId);
+        reserveThread.join();
+    }
+
+    return time;
+}
+
+
+int main() {
+    printCWD();
+    readNodes("../nodes_input.csv");
+    readPaths("../paths_input.csv");
+    readRobots("../robots_input.csv");
+
+    configureTaskTimes();
+
+    int robotId = 0;
+    int timeSigma = startRobot(robotId);
+    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
+
+    std::this_thread::sleep_for(std::chrono::seconds(600));
+    std::cout << "main end " << '\n';
+
+//    robotId = 1;
+//    timeSigma = measureTime(robotId);
+//    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
+//
+//    robotId = 2;
+//    timeSigma = measureTime(robotId);
+//    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
+//
+//    robotId = 3;
+//    timeSigma = measureTime(robotId);
+//    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
+
+    return 0;
 }
