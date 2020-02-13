@@ -13,6 +13,8 @@
 #include <mutex>
 #include <chrono>
 
+#include <ctime>
+
 using namespace std;
 using namespace cv;
 
@@ -217,18 +219,34 @@ string printCircuit(const int& robotId) {
     return stream.str();
 }
 
+string printTime(){
+        time_t currentTime;
+        struct tm *localTime;
+
+        time( &currentTime );                   // Get the current time
+        localTime = localtime( &currentTime );  // Convert the current time to the local time
+
+        int hour   = localTime->tm_hour;
+        int mins    = localTime->tm_min;
+        int secs    = localTime->tm_sec;
+
+        stringstream stream;
+        stream << hour << ":" << mins << ":" << secs << " ";
+        return stream.str();
+};
 
 struct Billboard {
     int nodeId;
     mutex nodeMutex;
 };
 
+std::chrono::time_point<std::chrono::high_resolution_clock> start;
 map<int, Billboard> _billboards;
 mutex functionMutex;
 int reserveBillboard(int nodeId, int taskTime, int robotId) {
     {
         stringstream stream;
-        stream << nodeId << ": R" << robotId << ": arrived      <" << this_thread::get_id() << ">\n";
+        stream << printTime() << nodeId << ": R" << robotId << ": arrived      <" << this_thread::get_id() << ">\n";
         string log = stream.str();
         cout << log;
     }
@@ -241,7 +259,7 @@ int reserveBillboard(int nodeId, int taskTime, int robotId) {
 
     {
         stringstream stream;
-        stream << nodeId << ": R" << robotId << ": working for " << taskTime << " secs." << "\n";
+        stream << printTime() << nodeId << ": R" << robotId << ": working for " << taskTime << " secs." << "\n";
         string log = stream.str();
         cout << log;
     }
@@ -268,7 +286,7 @@ int startRobot(int robotId) {
 
         {
             stringstream stream;
-            stream << node.id << ": R" << robotId << ": traveling, assigned task:" << taskString(robot, node) << "\n";
+            stream << printTime() << node.id << ": R" << robotId << ": traveling, assigned task:" << taskString(robot, node) << "\n";
             string log = stream.str();
             cout << log;
         }
@@ -279,6 +297,7 @@ int startRobot(int robotId) {
 
     return time;
 }
+
 
 int main() {
     printCWD();
