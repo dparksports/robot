@@ -237,11 +237,6 @@ string printTime(){
         return stream.str();
 };
 
-struct Billboard {
-    int nodeId;
-    mutex nodeMutex;
-};
-
 void logRobotWorking(const int& pathIndex, const NodeSpec &node, int taskTime, int robotId) {
     stringstream stream;
     stream << printTime() << pathIndex + 1 << "(" << node.id << "): R" << robotId << ": arrived & working for " << taskTime << " secs." << "\n";
@@ -262,6 +257,12 @@ void logRuntime(const int& pathIndex, const NodeSpec &node, const RobotSpec& rob
     string log = stream.str();
     cout << log;
 }
+
+
+struct Billboard {
+    int nodeId;
+    mutex nodeMutex;
+};
 
 map<int, Billboard> _billboards;
 
@@ -293,11 +294,17 @@ int startRobot(int robotId) {
         robot.measuredTime += travelTime;
 
         int taskTimeInt = taskTime(robot, node);
-        robot.measuredTime += taskTimeInt;
+//        robot.measuredTime += taskTimeInt;
 
         logRobotTraveling(pathIndex, node, robot, travelTime);
         std::this_thread::sleep_for(std::chrono::milliseconds(travelTime));
+
+
+        std::chrono::time_point<std::chrono::high_resolution_clock> start;
         reserveBillboard(pathIndex, node,taskTimeInt,robotId);
+        std::chrono::duration<double, std::milli> diff = std::chrono::high_resolution_clock::now() - start;
+        robot.measuredTime += diff.count();
+
         logRuntime(pathIndex, node, robot);
         {
             int nodeId = 134;
@@ -358,7 +365,7 @@ int main() {
     configureTaskTimes();
 
     int totalEstimatedTime = 0;
-    const int totalRunningRobots = 3;
+    const int totalRunningRobots = 4;
     string timeFileName = "../times.csv";
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
