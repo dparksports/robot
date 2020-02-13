@@ -185,8 +185,8 @@ int measureTime(const int& robotId) {
         int nodeId = circuit.at(pathIndex);
         NodeSpec node = _mapNode[nodeId];
 
-        // robot needs to travel to the first node.
-        int travelTime = robot.speed;
+        // robot starts from the first node.
+        int travelTime = (pathIndex == 0) ? 0 : robot.speed;
         time += travelTime;
 
         int taskTimeInt = taskTime(robot, node);
@@ -245,12 +245,12 @@ std::chrono::time_point<std::chrono::high_resolution_clock> start;
 map<int, Billboard> _billboards;
 mutex functionMutex;
 int reserveBillboard(int nodeId, int taskTime, int robotId) {
-    {
-        stringstream stream;
-        stream << printTime() << nodeId << ": R" << robotId << ": arrived  <" << this_thread::get_id() << ">\n";
-        string log = stream.str();
-        cout << log;
-    }
+//    {
+//        stringstream stream;
+//        stream << printTime() << nodeId << ": R" << robotId << ": arrived  <" << this_thread::get_id() << ">\n";
+//        string log = stream.str();
+//        cout << log;
+//    }
 
     Billboard &billboard = _billboards[nodeId];
     if (billboard.nodeId == 0) {
@@ -259,7 +259,7 @@ int reserveBillboard(int nodeId, int taskTime, int robotId) {
 
     {
         stringstream stream;
-        stream << printTime() << nodeId << ": R" << robotId << ": working for " << taskTime << " secs." << "\n";
+        stream << printTime() << nodeId << ": R" << robotId << ": arrived & working for " << taskTime << " secs." << "\n";
         string log = stream.str();
         cout << log;
     }
@@ -272,15 +272,15 @@ const int secondsInHour = 3600;
 
 int startRobot(int robotId) {
     vector<int> circuit = _setOfPaths[robotId];
-    RobotSpec robot = _robots[robotId];
+    RobotSpec& robot = _robots[robotId];
 
     int time = 0;
     for (int pathIndex = 0; pathIndex < circuit.size(); ++pathIndex) {
         int nodeId = circuit.at(pathIndex);
         NodeSpec node = _mapNode[nodeId];
 
-        // robot needs to travel to the first node.
-        int travelTime = robot.speed;
+        // robot starts from the first node.
+        int travelTime = (pathIndex == 0) ? 0 : robot.speed;
         time += travelTime;
 
         int taskTimeInt = taskTime(robot, node);
@@ -289,8 +289,8 @@ int startRobot(int robotId) {
 
         {
             stringstream stream;
-            stream << printTime() << node.id << ": R" << robotId << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << "\n";
-            stream << printTime() << node.id << ": R" << robotId << ": measured time:" << time / secondsInHour << "\n";
+            stream << printTime() << node.id << ": R" << robotId << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << ": run time: " << robot.measuredTime << " secs \n";
+//            stream << printTime() << node.id << ": R" << robotId << ": run time: " << robot.measuredTime << " secs \n";
             string log = stream.str();
             cout << log;
         }
