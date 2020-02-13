@@ -243,6 +243,7 @@ int startRobot(int robotId) {
         cout << "R(" << robotId << "): traveling:" << travelTime << " node:" << nodeId << " task:" << taskString(robot, node) << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(travelTime));
         reserveBillboard(nodeId,taskTimeInt,robotId);
+        cout << "R(" << robotId << "): accumulated time:" << time << "\n";
     }
 
     return time;
@@ -255,10 +256,6 @@ int main() {
     readRobots("../robots_input.csv");
 
     configureTaskTimes();
-
-    int robotId = 0;
-    int timeSigma = startRobot(robotId);
-    std::cout << "timeSigma(" << robotId << "):" << timeSigma << std::endl;
 
     for (int robotId = 0; robotId < 1; ++robotId) {
         std::packaged_task<int(int)> reserveTask(startRobot);
