@@ -7,7 +7,6 @@
 #include <vector>
 
 #include <opencv2/core/core.hpp>
-#include "boost/filesystem.hpp"   // includes all needed Boost.Filesystem declarations
 
 #include <thread>
 #include <future>
@@ -123,11 +122,6 @@ void readRobots(const cv::String& path) {
 
 map<string, int> _robotTaskTimes;
 void configureTaskTimes() {
-//    _robotTaskTimes["mover-push"] = 10;
-//    _robotTaskTimes["mover-pull"] = 15;
-//    _robotTaskTimes["organizer-pick"] = 6;
-//    _robotTaskTimes["organizer-place"] = 8;
-
     _robotTaskTimes["mover-push"] = 20;
     _robotTaskTimes["mover-pull"] = 35;
     _robotTaskTimes["organizer-pick"] = 30;
@@ -188,9 +182,6 @@ int measureTime(const int& robotId) {
         int nodeId = circuit.at(pathIndex);
         NodeSpec node = _mapNode[nodeId];
 
-        // robot is placed at the first node.
-        //        int travelTime = (nodeId == 0) ? 0 : robot.speed;
-
         // robot needs to travel to the first node.
         int travelTime = robot.speed;
         time += travelTime;
@@ -237,7 +228,7 @@ mutex functionMutex;
 int reserveBillboard(int nodeId, int taskTime, int robotId) {
     {
         stringstream stream;
-        stream << "R(" << robotId << "): arrived:" << " nodeId:" << nodeId << " <" << this_thread::get_id() << ">\n";
+        stream << "R(" << robotId << "): arrived:" << " node(" << nodeId << ") <" << this_thread::get_id() << ">\n";
         string log = stream.str();
         cout << log;
     }
@@ -248,10 +239,10 @@ int reserveBillboard(int nodeId, int taskTime, int robotId) {
         billboard.nodeId = nodeId;
     }
 
-    cout << "R(" << robotId << "): taskTime:" << taskTime << " nodeId:" << nodeId << "\n";
+    cout << "R(" << robotId << "): taskTime:" << taskTime << " node(" << nodeId << ")\n";
     const lock_guard<std::mutex> nodeLockGuard(billboard.nodeMutex);
     std::this_thread::sleep_for(std::chrono::seconds(taskTime));
-    cout << "R(" << robotId << "): completed:" << " node:" << nodeId << " <" << this_thread::get_id() << ">\n";
+    cout << "R(" << robotId << "): completed:" << " node(" << nodeId << ") <" << this_thread::get_id() << ">\n";
     return nodeId;
 }
 
@@ -260,11 +251,9 @@ int startRobot(int robotId) {
     RobotSpec robot = _robots[robotId];
 
     int time = 0;
-    for (int nodeIndex = 0; nodeIndex < circuit.size(); ++nodeIndex) {
-        NodeSpec node = _mapNode[nodeIndex];
-
-        // robot is placed at the first node.
-        //        int travelTime = (nodeId == 0) ? 0 : robot.speed;
+    for (int pathIndex = 0; pathIndex < circuit.size(); ++pathIndex) {
+        int nodeId = circuit.at(pathIndex);
+        NodeSpec node = _mapNode[nodeId];
 
         // robot needs to travel to the first node.
         int travelTime = robot.speed;
@@ -273,10 +262,10 @@ int startRobot(int robotId) {
         int taskTimeInt = taskTime(robot, node);
         time += taskTimeInt;
 
-        cout << "R(" << robotId << "): traveling:" << travelTime << " nodeIndex:" << nodeIndex << " nodeId:" << node.id << " task:" << taskString(robot, node) << "\n";
+        cout << "R(" << robotId << "): traveling:" << travelTime << "  path:" << pathIndex << "(" << node.id << ") task:" << taskString(robot, node) << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(travelTime));
         reserveBillboard(node.id,taskTimeInt,robotId);
-        cout << "R(" << robotId << "): accumulated time:" << time << "\n";
+        cout << "R(" << robotId << "):  time:" << time << "\n";
     }
 
     return time;
@@ -295,7 +284,7 @@ int main() {
         std::cout << printCircuit(robotId) << "\n";
     }
 
-    for (int robotId = 0; robotId < 1; ++robotId) {
+    for (int robotId = 1; robotId < 2; ++robotId) {
         std::packaged_task<int(int)> reserveTask(startRobot);
         std::future<int> reserveFuture = reserveTask.get_future();
         std::thread reserveThread(std::move(reserveTask), robotId);
