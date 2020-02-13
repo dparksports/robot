@@ -385,7 +385,7 @@ int main() {
         reserveThread.detach();
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(60 * 2));
+    std::this_thread::sleep_for(std::chrono::seconds(30 * 2));
     writeVisitFile("../visited.csv");
 
     string measuredtimesFile = "../measuredtimes.csv";
@@ -394,9 +394,7 @@ int main() {
         if (! writeTimeFile(measuredtimesFile, robotId, measure)) {
             std::cerr << "Failed to write to file: " << measuredtimesFile << endl;
         }
-        std::cout << "R-" << robotId << ": estimated minimum run time:" << measure << " secs.\n";
-        std::cout << printCircuit(robotId) << "\n";
-        totalEstimatedTime += measure;
+        std::cout << "R-" << robotId << ": measured run time:" << measure << " secs.\n";
     }
     return 0;
 }
