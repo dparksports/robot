@@ -313,11 +313,6 @@ int startRobot(int robotId) {
         robot.measuredTime += diff.count();
 
         logRuntime(pathIndex, node, robot);
-        {
-            int nodeId = 134;
-            NodeSpec& inspectNode = _mapNode[nodeId];
-            cout << inspectNode.visitedRobotIds.at(0) << endl;
-        }
     }
 
     return robot.measuredTime;
@@ -373,12 +368,8 @@ int main() {
 
     int totalEstimatedTime = 0;
     const int totalRunningRobots = 4;
-    string estimatedtimes = "../estimatedtimes.csv";
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = estimateTime(robotId);
-        if (! writeTimeFile(estimatedtimes, robotId, measure)) {
-            std::cerr << "Failed to write to file: " << estimatedtimes << endl;
-        }
         std::cout << "R-" << robotId << ": estimated minimum run time:" << measure << " secs.\n";
         std::cout << printCircuit(robotId) << "\n";
         totalEstimatedTime += measure;
