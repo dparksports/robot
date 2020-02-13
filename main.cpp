@@ -209,8 +209,8 @@ string printCircuit(const int& robotId) {
         }
 
         if (pathIndex + 1 != circuit.size()) {
-//            stream << "-> ";
-            stream << "\n";
+            stream << "->";
+//            stream << "\n";
         }
     }
 
@@ -279,12 +279,19 @@ int main() {
 
     configureTaskTimes();
 
-    for (int robotId = 0; robotId < 4; ++robotId) {
-        std::cout << "R(" << robotId << "): minimum run time without node queuing:" << measureTime(robotId) << " secs.\n";
+    const int totalRunningRobots = 2;
+    int totalTime = 0;
+    for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
+        int measure = measureTime(robotId);
+        std::cout << "R(" << robotId << "): minimum run time without node queuing:" << measure / 60.0 << " minutes.\n";
         std::cout << printCircuit(robotId) << "\n";
+        totalTime += measure;
     }
 
-    for (int robotId = 1; robotId < 2; ++robotId) {
+    std::cout << "Starting Path Simulation.\n";
+    std::cout << "Estimated Total Run Time:" << totalTime / 3600.0 << "hours. \n";
+
+    for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         std::packaged_task<int(int)> reserveTask(startRobot);
         std::future<int> reserveFuture = reserveTask.get_future();
         std::thread reserveThread(std::move(reserveTask), robotId);
