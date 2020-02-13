@@ -177,7 +177,7 @@ int taskTime(const RobotSpec& robot, const NodeSpec& node) {
     return taskTime;
 }
 
-int measureTime(const int& robotId) {
+int estimateTime(const int& robotId) {
     vector<int> circuit = _setOfPaths[robotId];
     RobotSpec robot = _robots[robotId];
 
@@ -195,6 +195,12 @@ int measureTime(const int& robotId) {
     }
 
     return time;
+}
+
+int measuredTime(const int& robotId) {
+    vector<int> circuit = _setOfPaths[robotId];
+    RobotSpec robot = _robots[robotId];
+    return robot.measuredTime;
 }
 
 string printCircuit(const int& robotId) {
@@ -299,8 +305,9 @@ int startRobot(int robotId) {
         logRobotTraveling(pathIndex, node, robot, travelTime);
         std::this_thread::sleep_for(std::chrono::milliseconds(travelTime));
 
-
         std::chrono::time_point<std::chrono::high_resolution_clock> start;
+        start = std::chrono::high_resolution_clock::now();
+
         reserveBillboard(pathIndex, node,taskTimeInt,robotId);
         std::chrono::duration<double, std::milli> diff = std::chrono::high_resolution_clock::now() - start;
         robot.measuredTime += diff.count();
@@ -366,13 +373,13 @@ int main() {
 
     int totalEstimatedTime = 0;
     const int totalRunningRobots = 4;
-    string timeFileName = "../times.csv";
+    string estimatedtimes = "../estimatedtimes.csv";
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
-        int measure = measureTime(robotId);
-        if (! writeTimeFile(timeFileName, robotId, measure)) {
-            std::cerr << "Failed to write to file: " << timeFileName << endl;
+        int measure = estimateTime(robotId);
+        if (! writeTimeFile(estimatedtimes, robotId, measure)) {
+            std::cerr << "Failed to write to file: " << estimatedtimes << endl;
         }
-        std::cout << "R-" << robotId << ": minimum run time:" << measure << " secs.\n";
+        std::cout << "R-" << robotId << ": estimated minimum run time:" << measure << " secs.\n";
         std::cout << printCircuit(robotId) << "\n";
         totalEstimatedTime += measure;
     }
@@ -389,5 +396,16 @@ int main() {
 
     std::this_thread::sleep_for(std::chrono::seconds(60 * 2));
     writeVisitFile("../visited.csv");
+
+    string measuredtimesFile = "../measuredtimes.csv";
+    for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
+        int measure = measuredTime(robotId);
+        if (! writeTimeFile(measuredtimesFile, robotId, measure)) {
+            std::cerr << "Failed to write to file: " << measuredtimesFile << endl;
+        }
+        std::cout << "R-" << robotId << ": estimated minimum run time:" << measure << " secs.\n";
+        std::cout << printCircuit(robotId) << "\n";
+        totalEstimatedTime += measure;
+    }
     return 0;
 }
