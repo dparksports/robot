@@ -224,8 +224,8 @@ string printTime(){
         time_t currentTime;
         struct tm *localTime;
 
-        time( &currentTime );                   // Get the current time
-        localTime = localtime( &currentTime );  // Convert the current time to the local time
+        time( &currentTime );
+        localTime = localtime( &currentTime );
 
         int hour   = localTime->tm_hour;
         int mins    = localTime->tm_min;
@@ -241,17 +241,10 @@ struct Billboard {
     mutex nodeMutex;
 };
 
-std::chrono::time_point<std::chrono::high_resolution_clock> start;
 map<int, Billboard> _billboards;
 mutex functionMutex;
-int reserveBillboard(int nodeId, int taskTime, int robotId) {
-//    {
-//        stringstream stream;
-//        stream << printTime() << nodeId << ": R" << robotId << ": arrived  <" << this_thread::get_id() << ">\n";
-//        string log = stream.str();
-//        cout << log;
-//    }
 
+int reserveBillboard(int nodeId, int taskTime, int robotId) {
     Billboard &billboard = _billboards[nodeId];
     if (billboard.nodeId == 0) {
         billboard.nodeId = nodeId;
@@ -290,7 +283,6 @@ int startRobot(int robotId) {
         {
             stringstream stream;
             stream << printTime() << node.id << ": R" << robotId << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << ": run time: " << robot.measuredTime << " secs \n";
-//            stream << printTime() << node.id << ": R" << robotId << ": run time: " << robot.measuredTime << " secs \n";
             string log = stream.str();
             cout << log;
         }
@@ -312,16 +304,16 @@ int main() {
     configureTaskTimes();
 
     const int totalRunningRobots = 4;
-    int totalTime = 0;
+    int totalEstimatedTime = 0;
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
         std::cout << "R-" << robotId << ": minimum run time:" << measure / secondsInHour << " hours.\n";
         std::cout << printCircuit(robotId) << "\n";
-        totalTime += measure;
+        totalEstimatedTime += measure;
     }
 
     std::cout << "Starting Path Simulation.\n";
-    std::cout << "Estimated Total Run Time: " << totalTime / secondsInHour << " hours. \n";
+    std::cout << "Estimated Total Run Time: " << totalEstimatedTime / secondsInHour << " hours. \n";
 
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         std::packaged_task<int(int)> reserveTask(startRobot);
@@ -330,7 +322,6 @@ int main() {
         reserveThread.detach();
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(1200));
-    std::cout << "main end " << '\n';
+    std::this_thread::sleep_for(std::chrono::seconds(totalEstimatedTime));
     return 0;
 }
