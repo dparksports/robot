@@ -251,7 +251,14 @@ void logRobotWorking(const int& pathIndex, const NodeSpec &node, int taskTime, i
 
 void logRobotTraveling(const int& pathIndex, const NodeSpec &node, const RobotSpec& robot, int travelTime) {
     stringstream stream;
-    stream << printTime() << pathIndex + 1 << "(" << node.id << "): R" << robot.id << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << ": run time: " << robot.measuredTime << " secs \n";
+    stream << printTime() << pathIndex + 1 << "(" << node.id << "): R" << robot.id << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << "\n";
+    string log = stream.str();
+    cout << log;
+}
+
+void logRuntime(const int& pathIndex, const NodeSpec &node, const RobotSpec& robot) {
+    stringstream stream;
+    stream << printTime() << pathIndex + 1 << "(" << node.id << "): R" << robot.id << ": completed run time: " << robot.measuredTime << " secs \n";
     string log = stream.str();
     cout << log;
 }
@@ -277,25 +284,24 @@ int startRobot(int robotId) {
     vector<int> circuit = _setOfPaths[robotId];
     RobotSpec& robot = _robots[robotId];
 
-    int time = 0;
     for (int pathIndex = 0; pathIndex < circuit.size(); ++pathIndex) {
         int nodeId = circuit.at(pathIndex);
         NodeSpec node = _mapNode[nodeId];
 
         // robot starts from the first node.
         int travelTime = (pathIndex == 0) ? 0 : robot.speed;
-        time += travelTime;
+        robot.measuredTime += travelTime;
 
         int taskTimeInt = taskTime(robot, node);
-        time += taskTimeInt;
-        robot.measuredTime += time;
+        robot.measuredTime += taskTimeInt;
 
         logRobotTraveling(pathIndex, node, robot, travelTime);
         std::this_thread::sleep_for(std::chrono::milliseconds(travelTime));
         reserveBillboard(pathIndex, node,taskTimeInt,robotId);
+        logRuntime(pathIndex, node, robot);
     }
 
-    return time;
+    return robot.measuredTime;
 }
 
 bool writeTimeFile(const string &fileName, const int& robotId, const int& time) {
@@ -343,7 +349,7 @@ int main() {
     configureTaskTimes();
 
     int totalEstimatedTime = 0;
-    const int totalRunningRobots = 2;
+    const int totalRunningRobots = 1;
     string timeFileName = "../times.csv";
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
@@ -356,7 +362,7 @@ int main() {
     }
 
     std::cout << "Starting Path Simulation.\n";
-    std::cout << "Estimated Total Run Time: " << totalEstimatedTime / secondsInHour << " hours. \n";
+    std::cout << "Estimated Total Run Time: " << totalEstimatedTime  << " secs. \n";
 
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         std::packaged_task<int(int)> reserveTask(startRobot);
