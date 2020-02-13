@@ -242,36 +242,33 @@ struct Billboard {
     mutex nodeMutex;
 };
 
-void logRobotArrived(const NodeSpec &node, int taskTime, int robotId);
+void logRobotWorking(const int& pathIndex, const NodeSpec &node, int taskTime, int robotId) {
+    stringstream stream;
+    stream << printTime() << pathIndex + 1 << "(" << node.id << "): R" << robotId << ": arrived & working for " << taskTime << " secs." << "\n";
+    string log = stream.str();
+    cout << log;
+}
+
+void logRobotTraveling(const int& pathIndex, const NodeSpec &node, const RobotSpec& robot, int travelTime) {
+    stringstream stream;
+    stream << printTime() << pathIndex + 1 << "(" << node.id << "): R" << robot.id << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << ": run time: " << robot.measuredTime << " secs \n";
+    string log = stream.str();
+    cout << log;
+}
 
 map<int, Billboard> _billboards;
-mutex functionMutex;
 
-int reserveBillboard(NodeSpec& node, int taskTime, int robotId) {
+int reserveBillboard(const int& pathIndex, NodeSpec& node, int taskTime, int robotId) {
     Billboard &billboard = _billboards[node.id];
     if (billboard.nodeId == 0) {
         billboard.nodeId = node.id;
     }
 
-    logRobotWorking(node, taskTime, robotId);
+    logRobotWorking(pathIndex, node, taskTime, robotId);
     const lock_guard<std::mutex> nodeLockGuard(billboard.nodeMutex);
     node.visitedRobotIds.push_back(robotId);
-    std::this_thread::sleep_for(std::chrono::seconds(taskTime));
+    std::this_thread::sleep_for(std::chrono::milliseconds(taskTime));
     return node.id;
-}
-
-void logRobotWorking(const NodeSpec &node, int taskTime, int robotId) {
-    stringstream stream;
-    stream << printTime() << node.id << ": R" << robotId << ": arrived & working for " << taskTime << " secs." << "\n";
-    string log = stream.str();
-    cout << log;
-}
-
-void logRobotTraveling(const NodeSpec &node, const RobotSpec& robot, int travelTime) {
-    stringstream stream;
-    stream << printTime() << node.id << ": R" << robot.id << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << ": run time: " << robot.measuredTime << " secs \n";
-    string log = stream.str();
-    cout << log;
 }
 
 const int secondsInHour = 3600;
@@ -293,9 +290,9 @@ int startRobot(int robotId) {
         time += taskTimeInt;
         robot.measuredTime += time;
 
-        logRobotTraveling(node, robot, travelTime);
-        std::this_thread::sleep_for(std::chrono::seconds(travelTime));
-        reserveBillboard(node,taskTimeInt,robotId);
+        logRobotTraveling(pathIndex, node, robot, travelTime);
+        std::this_thread::sleep_for(std::chrono::milliseconds(travelTime));
+        reserveBillboard(pathIndex, node,taskTimeInt,robotId);
     }
 
     return time;
@@ -346,7 +343,7 @@ int main() {
     configureTaskTimes();
 
     int totalEstimatedTime = 0;
-    const int totalRunningRobots = 4;
+    const int totalRunningRobots = 2;
     string timeFileName = "../times.csv";
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
@@ -368,7 +365,7 @@ int main() {
         reserveThread.detach();
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(totalEstimatedTime));
+    std::this_thread::sleep_for(std::chrono::seconds(600));
     writeVisitFile("../visited.csv");
     return 0;
 }
