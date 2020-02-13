@@ -96,6 +96,7 @@ struct RobotSpec {
     int number;
     RobotType type;
     int speed;
+    int measuredTime;
 };
 
 map<int, RobotSpec> _robots;
@@ -231,7 +232,7 @@ string printTime(){
         int secs    = localTime->tm_sec;
 
         stringstream stream;
-        stream << hour << ":" << mins << ":" << secs << " ";
+        stream << hour << ":" << mins << ":" << secs << "  ";
         return stream.str();
 };
 
@@ -246,12 +247,11 @@ mutex functionMutex;
 int reserveBillboard(int nodeId, int taskTime, int robotId) {
     {
         stringstream stream;
-        stream << printTime() << nodeId << ": R" << robotId << ": arrived      <" << this_thread::get_id() << ">\n";
+        stream << printTime() << nodeId << ": R" << robotId << ": arrived  <" << this_thread::get_id() << ">\n";
         string log = stream.str();
         cout << log;
     }
 
-//    const lock_guard<std::mutex> functionGuard(functionMutex);
     Billboard &billboard = _billboards[nodeId];
     if (billboard.nodeId == 0) {
         billboard.nodeId = nodeId;
@@ -268,6 +268,8 @@ int reserveBillboard(int nodeId, int taskTime, int robotId) {
     return nodeId;
 }
 
+const int secondsInHour = 3600;
+
 int startRobot(int robotId) {
     vector<int> circuit = _setOfPaths[robotId];
     RobotSpec robot = _robots[robotId];
@@ -283,16 +285,18 @@ int startRobot(int robotId) {
 
         int taskTimeInt = taskTime(robot, node);
         time += taskTimeInt;
+        robot.measuredTime += time;
 
         {
             stringstream stream;
             stream << printTime() << node.id << ": R" << robotId << ": traveling(" << travelTime << "), assigned task:" << taskString(robot, node) << "\n";
+            stream << printTime() << node.id << ": R" << robotId << ": measured time:" << time / secondsInHour << "\n";
             string log = stream.str();
             cout << log;
         }
+
         std::this_thread::sleep_for(std::chrono::seconds(travelTime));
         reserveBillboard(node.id,taskTimeInt,robotId);
-//        cout << "R-" << robotId << ":  time:" << time << "\n";
     }
 
     return time;
@@ -307,8 +311,7 @@ int main() {
 
     configureTaskTimes();
 
-    const int secondsInHour = 3600;
-    const int totalRunningRobots = 2;
+    const int totalRunningRobots = 4;
     int totalTime = 0;
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
