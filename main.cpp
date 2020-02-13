@@ -228,7 +228,7 @@ mutex functionMutex;
 int reserveBillboard(int nodeId, int taskTime, int robotId) {
     {
         stringstream stream;
-        stream << "R(" << robotId << "): arrived:" << " node(" << nodeId << ") <" << this_thread::get_id() << ">\n";
+        stream << "R-" << robotId << "): arrived(" << nodeId << ") <" << this_thread::get_id() << ">\n";
         string log = stream.str();
         cout << log;
     }
@@ -239,10 +239,10 @@ int reserveBillboard(int nodeId, int taskTime, int robotId) {
         billboard.nodeId = nodeId;
     }
 
-    cout << "R(" << robotId << "): taskTime:" << taskTime << " node(" << nodeId << ")\n";
+    cout << "R-" << robotId << ": working(" << nodeId << ")\n";
     const lock_guard<std::mutex> nodeLockGuard(billboard.nodeMutex);
     std::this_thread::sleep_for(std::chrono::seconds(taskTime));
-    cout << "R(" << robotId << "): completed:" << " node(" << nodeId << ") <" << this_thread::get_id() << ">\n";
+//    cout << "R(" << robotId << "): completed:" << " node(" << nodeId << ") <" << this_thread::get_id() << ">\n";
     return nodeId;
 }
 
@@ -262,10 +262,11 @@ int startRobot(int robotId) {
         int taskTimeInt = taskTime(robot, node);
         time += taskTimeInt;
 
-        cout << "R(" << robotId << "): traveling:" << travelTime << "  path:" << pathIndex << "(" << node.id << ") task:" << taskString(robot, node) << "\n";
+//        cout << "R(" << robotId << "): traveling:" << travelTime << "  path:" << pathIndex << "(" << node.id << ") task:" << taskString(robot, node) << "\n";
+        cout << "R-" << robotId << ": traveling(" << node.id << ") assigned task:" << taskString(robot, node) << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(travelTime));
         reserveBillboard(node.id,taskTimeInt,robotId);
-        cout << "R(" << robotId << "):  time:" << time << "\n";
+//        cout << "R-" << robotId << ":  time:" << time << "\n";
     }
 
     return time;
@@ -279,17 +280,18 @@ int main() {
 
     configureTaskTimes();
 
-    const int totalRunningRobots = 2;
+    const int secondsInHour = 3600;
+    const int totalRunningRobots = 3;
     int totalTime = 0;
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         int measure = measureTime(robotId);
-        std::cout << "R(" << robotId << "): minimum run time without node queuing:" << measure / 60.0 << " minutes.\n";
+        std::cout << "R-" << robotId << ": minimum run time:" << measure / secondsInHour << " hours.\n";
         std::cout << printCircuit(robotId) << "\n";
         totalTime += measure;
     }
 
     std::cout << "Starting Path Simulation.\n";
-    std::cout << "Estimated Total Run Time:" << totalTime / 3600.0 << "hours. \n";
+    std::cout << "Estimated Total Run Time:" << totalTime / secondsInHour << "hours. \n";
 
     for (int robotId = 0; robotId < totalRunningRobots; ++robotId) {
         std::packaged_task<int(int)> reserveTask(startRobot);
