@@ -1,3 +1,11 @@
+//
+//  main.cpp
+//  Robot Timing Simulation
+//
+//  Created by Dan Park on 2/12/2020
+//  Copyright (c) 2020 Dan Park. All rights reserved.
+//
+
 #include <fstream>
 #include <sstream>
 #include <iostream>
